@@ -249,7 +249,9 @@ final class MMDCompleter {
      *                                P-Mode conflicts
      */
     private void completeCollaborationInfo() throws MessageSubmitException {
-        final CollaborationInfo sci = submission.getCollaborationInfo();
+    	if (this.submission.getCollaborationInfo() == null)
+        	this.submission.setCollaborationInfo(new CollaborationInfo());        
+    	final CollaborationInfo sci = submission.getCollaborationInfo();
         final IBusinessInfo pbi = (leg.getUserMessageFlow() != null ? leg.getUserMessageFlow().getBusinessInfo() : null);
 
         final String pa = (pbi != null ? pbi.getAction() : null);
