@@ -76,8 +76,9 @@ public class MessageIdUtils {
             // Add random number to left part
             leftPart += "-" + String.valueOf(ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE));
 
-            // And return with rightPart added again
-            return leftPart + rightPart;
+            // And return with rightPart added again, but ensure that the contentId does not contain any special chars
+            // as this can cause issues in security processing            
+            return (leftPart + rightPart).replaceAll("[^" + VALID_CHARS + "]", "_");
         }
     }
 
@@ -85,11 +86,12 @@ public class MessageIdUtils {
      * Contains the regular expression to use for checking on conformance to RFC2822. The regular expression is based
      * on the ABNF definition of messageId given in the RFC.
      */
-    private static final String   RFC2822_MESSAGE_ID;
+    private static final String RFC2822_MESSAGE_ID;
+    private static final String	VALID_CHARS;    
     static {
-        String  ALPHA = "[a-zA-Z]";
-        String  DIGIT = "\\d";
-        String  atext = "[" + ALPHA + DIGIT + "\\Q" +
+        String  ALPHA  = "\\p{Alpha}";
+        String  DIGIT  = "\\d";
+        String  achars = ALPHA + DIGIT + "\\Q" +
                             "!" + "#" +
                             "$" + "%" +
                             "&" + "'" +
@@ -100,13 +102,16 @@ public class MessageIdUtils {
                             "`" + "{" +
                             "|" + "}" +
                             "~" + "\\E" + "]";
+        
+        String 	atext  = "[" + achars + "]";
+        
+        String  dot_atom_text   =   atext + "+" +  "(\\." + atext + "+)*";
 
-        String   dot_atom_text   =   atext + "+" +  "(\\." + atext + "+)*";
-
-        String   id_left         =   dot_atom_text;
-        String   id_right        =   dot_atom_text;
+        String  id_left         =   dot_atom_text;
+        String  id_right        =   dot_atom_text;
 
         RFC2822_MESSAGE_ID = id_left + "@" + id_right;
+        VALID_CHARS = achars + "\\.@";
     }
 
     /**
