@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.3
+##### Unreleased
+### Fixed
+* Generated Content-Id results in signature failure [#99](https://github.com/holodeck-b2b/Holodeck-B2B/issues/99)
+* NPE when white space is containd between the `ds:Signature` and `ds:SignedInfo` elements of a received message [#100](https://github.com/holodeck-b2b/Holodeck-B2B/issues/100)
+* NPE for submitted UserMessage without CollaborationInfo [#105](https://github.com/holodeck-b2b/Holodeck-B2B/issues/105)
+* Incorrect reporting of key transport algorithm
+
 ## 4.1.2
 ##### 2019-04-10
 ### Fixed
