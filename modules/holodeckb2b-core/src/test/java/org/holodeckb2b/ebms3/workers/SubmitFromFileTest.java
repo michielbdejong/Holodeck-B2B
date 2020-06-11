@@ -111,6 +111,7 @@ public class SubmitFromFileTest {
                 
         renamed = 0;
         workers[numOfWorkers] = new Thread(new Runnable() {
+			@Override
 			public void run() {
 				final File[] mmdFiles = new File(watchPath).listFiles(new FileFilter() {
                     @Override
@@ -123,10 +124,8 @@ public class SubmitFromFileTest {
 					final String mmdFileName = mmdFiles[i-1].getAbsolutePath();				
 					final File tmpFile = new File(mmdFileName.substring(0, mmdFileName.toLowerCase().indexOf(".mmd"))
 															 + ".processing");
-		            if(mmdFiles[i-1].exists() && !tmpFile.exists()) {
-		            	mmdFiles[i-1].renameTo(tmpFile);
-		            	renamed++;
-		            }
+		            if(mmdFiles[i-1].exists() && !tmpFile.exists() && mmdFiles[i-1].renameTo(tmpFile))
+		            	renamed++;		            
 				}
 				try {
 					Thread.sleep(10);
